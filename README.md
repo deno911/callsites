@@ -1,62 +1,62 @@
-# deno911/utilites
+<div align="center">
 
-#### Monorepo for various Deno911 utility modules for the Deno ecosystem
+# deno911/utilities
 
-- [x] [`callsites`](./modules/)
+##### Various utility modules for the Deno ecosystem, stored under one roof
 
----
+</div><br>
+
+## [**callsites**](./modules/callsites#readme) - painlessly access V8 stack trace data
+
+- features the new zero-cost AsyncStackTrace API
+- provides detailed information on function call sites 
+- determine downstream info (like `import.meta.url`) that is otherwise inaccessible  
+_(this is the strategy used by the [**deno_blog**](https://github.com/denoland/blog) project)_
+
+<br>
 
 ## Contributing
 
-This section assumes you have [**the GitHub CLI**][gh-cli]
+> _This section assumes you have [**the GitHub CLI**][gh-cli]_
 
-### Fork and clone the repository locally
+<br>
+
+### 1. Fork and clone the repository locally
 
 ```sh
-gh repo fork deno911/kit --clone
+gh repo fork deno911/utilities --clone
 ```
 
-### Create a new branch for your changes
+### 2. Create a new branch for your changes
 
 ```sh
 git checkout -b fix/typo-in-readme
 ```
 
-### Make small changes and concise commits
+### 3. Make small changes and concise commits
+
+✅ Ensure you've performed `fmt`, `lint`, **and** `test` before committing.
 
 ```sh
-# hack hack hack...
-
-git commit README.md -m "fix: typos in README.md" && git push
+if deno fmt && deno lint && deno test -A --no-check --unstable; then
+  git add README.md
+  git commit -S[GPG-KEY-iD] -m "fix: typo in readme"
+  git push
+fi
 ```
 
-> **Note**: keep the scope of your changes relevant and concise.
+### 4. Open a Pull Request
 
-<details><summary><strong>🐛  <u>If fixing a bug, be sure to create an Issue first</u></strong></summary><br>
-
-Unless, of course, you're fixing a bug for which an issue already exists!
-
-This allows the issue to be connected to your Pull Request, creating a permanent
-record of your contribution to the project. It also makes it easier for
-maintainers to track project progression.
-
-Creating an issue also ensures you're given proper credit for fixing that bug ;)
-
-</details>
-
-### Open a Pull Request
 
 ```sh
 gh pr create --title "fix: typos in README.md"
+
+# or just open github.com and use the web UI
 ```
 
-**Or just open your repo on GitHub.com and follow the prompts.**
+**Warning**: make sure you select the upstream repo for your PR!
 
-> **Warning**: make sure you select the upstream repo for your PR!
-
----
-
-<div align="center">
+<br><div align="center">
 
 ### [🅓🅔🅝🅞⑨①①][deno911]
 
@@ -74,4 +74,4 @@ gh pr create --title "fix: typos in README.md"
 [gh-actions]: https://actions.github.com "GitHub Actions Documentation"
 [gitpod]: https://gitpod.io "Gitpod.io Homepage"
 [npm]: https://npmjs.org "NPM Registry"
-[open-in-gitpod]: https://gitpod.io/#https://github.com/deno911/kit "Open in a new Gitpod Workspace"
+[open-in-gitpod]: https://gitpod.io/#https://github.com/deno911/utilities "Open in a new Gitpod Workspace"

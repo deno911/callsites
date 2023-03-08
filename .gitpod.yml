@@ -10,9 +10,7 @@ vscode:
     - "denoland.vscode-deno"
     - "editorconfig.editorconfig"
     - "vsls-contrib.gistfs"
-    - "sdras.night-owl"
     - "redhat.vscode-yaml"
-    - "antfu.iconify"
     - "antfu.browse-lite"
     - "bierner.markdown-preview-github-styles"
     - "gitpod.gitpod-desktop"
@@ -25,3 +23,6 @@ github:
     addLabel: "gitpod-prebuilt"
     addCheck: "prevent-merge-on-error"
     addBadge: true
+
+gitConfig:
+  core.hooksPath: ".github/hooks"

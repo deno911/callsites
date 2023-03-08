@@ -14,10 +14,3 @@ RUN mkdir -p ${DENO_INSTALL:-"/deno"} \
     && curl -fsSL https://deno.land/install.sh | sh \
     && chown -R ${USER:-vscode} ${DENO_INSTALL:-"/deno"}
 
-# [Optional] Uncomment this section to install additional OS packages.
-RUN sudo apt-get -y update \
-    && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends \
-        gcc build-essentials git-extras \
-    && sudo apt-get -y upgrade \
-    && sudo rm -rf /var/lib/apt/lists/* ;
