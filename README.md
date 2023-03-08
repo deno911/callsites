@@ -2,18 +2,33 @@
 
 # deno911/utilities
 
-##### Various utility modules for the Deno ecosystem, stored under one roof
+#### Various utility modules for the Deno ecosystem, stored under one roof
 
 </div><br>
 
-## [**callsites**](./modules/callsites#readme) - painlessly access V8 stack trace data
+## [**callsites**](./modules/callsites#readme)
 
-- features the new zero-cost AsyncStackTrace API
-- provides detailed information on function call sites 
-- determine downstream info (like `import.meta.url`) that is otherwise inaccessible  
+Access call site data from the V8 stack trace API
+
+- Features the new zero-cost AsyncStackTrace API
+- Determine downstream info (like `import.meta.url`) that is otherwise inaccessible  
 _(this is the strategy used by the [**deno_blog**](https://github.com/denoland/blog) project)_
 
 <br>
+
+```ts
+import { callsites } from "https://deno.land/x/callsites/mod.ts";
+
+const call = () => callsites()[0];
+const site = call();
+
+site.getFileName(); 
+// => "file:///Users/foo/bar.ts"
+site.isAsync(); 
+// => false
+```
+
+<br><hr><br>
 
 ## Contributing
 
