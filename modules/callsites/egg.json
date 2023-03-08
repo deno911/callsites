@@ -1,0 +1,27 @@
+{
+  "$schema": "https://x.nest.land/eggs@0.3.10/src/schema.json",
+  "name": "callsites",
+  "version": "0.1.0",
+  "description": "Retrieve call sites information from the V8 stack trace API.",
+  "homepage": "https://github.com/deno911/utilities/modules/callsites",
+  "repository": "https://github.com/deno911/utilities",
+  "releaseType": "minor",
+  "bump": "minor",
+  "entry": "./mod.ts",
+  "check": true,
+  "checkAll": true,
+  "checkFormat": "deno fmt",
+  "checkTests": "deno test --unstable --no-check -A",
+  "checkInstallation": false,
+  "unstable": false,
+  "unlisted": false,
+  "files": [
+    "./LICENSE",
+    "./README.md",
+    "./*.{ts,tsx,js,jsx,mjs,json,jsonc}"
+  ],
+  "ignore": [
+    "./test",
+    "./*test.*"
+  ]
+}
