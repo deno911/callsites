@@ -4,15 +4,18 @@
 
 #### Various utility modules for the Deno ecosystem, stored under one roof
 
-</div><br>
+</div>
+
+---
 
 ## [**callsites**](./modules/callsites#readme)
 
 Access call site data from the V8 stack trace API
 
-- Features the new zero-cost AsyncStackTrace API
-- Determine downstream info (like `import.meta.url`) that is otherwise inaccessible  
-_(this is the strategy used by the [**deno_blog**](https://github.com/denoland/blog) project)_
+- Features the new [zero-cost AsyncStackTrace API][asyncstacktrace-api]
+- Determine otherwise inaccessible downstream data, like `import.meta.url`
+  - <small>(this is the strategy used by the
+    [**deno_blog**](https://github.com/denoland/blog) project)</small>
 
 <br>
 
@@ -22,19 +25,17 @@ import { callsites } from "https://deno.land/x/callsites/mod.ts";
 const call = () => callsites()[0];
 const site = call();
 
-site.getFileName(); 
+site.getFileName();
 // => "file:///Users/foo/bar.ts"
-site.isAsync(); 
+site.isAsync();
 // => false
 ```
 
-<br><hr><br>
+---
 
 ## Contributing
 
 > _This section assumes you have [**the GitHub CLI**][gh-cli]_
-
-<br>
 
 ### 1. Fork and clone the repository locally
 
@@ -62,14 +63,14 @@ fi
 
 ### 4. Open a Pull Request
 
-
 ```sh
 gh pr create --title "fix: typos in README.md"
 
 # or just open github.com and use the web UI
 ```
 
-**Warning**: make sure you select the upstream repo for your PR!
+> **Warning** · make sure you've selected the _**upstream**_ repo for your Pull
+> Request!
 
 <br><div align="center">
 
@@ -90,3 +91,4 @@ gh pr create --title "fix: typos in README.md"
 [gitpod]: https://gitpod.io "Gitpod.io Homepage"
 [npm]: https://npmjs.org "NPM Registry"
 [open-in-gitpod]: https://gitpod.io/#https://github.com/deno911/utilities "Open in a new Gitpod Workspace"
+[asyncstacktrace-api]: https://v8.dev/docs/stack-trace-api#async-stack-traces "V8 - Zero-Cost Async Stack Traces API"
