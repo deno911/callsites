@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# run tests
+function __test() {
+  local result code
+  result=$(deno test -A --unstable --no-check 2>&1)
+  code=$?
+  
+  if ((code > 0)); then
+    echo -n "$result" | grep -q "No test modules found" || return $code;
+    return 0
+  fi
+  return 0
+}
+
+deno fmt --unstable && deno lint --unstable && __test
+exit $?
