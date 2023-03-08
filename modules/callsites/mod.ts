@@ -11,7 +11,6 @@ export interface CallSite {
    * returns `undefined`.
    */
   getThis<T = unknown>(): T | undefined;
-  getThis(): unknown;
 
   /**
    * Returns the type of `this` as a string. This is the name of the function
@@ -204,10 +203,12 @@ export interface CallSite {
   toString(): string;
 }
 
-type ResolvedCallSiteType = Required<{
-  [K in keyof CallSite as K extends "constructor" | symbol ? never : K]-?:
-    CallSite[K] extends (...args: any) => infer R ? R : never;
-}>;
+type ResolvedCallSiteType = Required<
+  {
+    [K in keyof CallSite as K extends "constructor" | symbol ? never : K]-?:
+      CallSite[K] extends (...args: any) => infer R ? R : never;
+  }
+>;
 
 /**
  * Represents a CallSite stack trace entry that has been resolved into a static
@@ -229,6 +230,7 @@ type ResolvedCallSiteType = Required<{
  * // => {"getThis":"undefined","getTypeName":"..."}
  * ```
  */
+// deno-lint-ignore no-empty-interface
 export interface ResolvedCallSite extends ResolvedCallSiteType {}
 
 /**
@@ -241,6 +243,7 @@ declare global {
     /**
      * Create `.stack` property on a target object.
      */
+    // deno-lint-ignore ban-types
     captureStackTrace(targetObject: object, constructor?: Function): void;
     /**
      * Optional override for formatting stack traces
@@ -338,7 +341,7 @@ export function callsites<U = CallSite>(
   Error.prepareStackTrace = prepareStackTrace as any;
 
   // create a new Error instance to capture the stack
-  const err = new Error() as any;
+  const err = {} as { stack: CallSite[] };
   Error.captureStackTrace(err, callsites);
 
   // extract the stack (this is the most important part)
@@ -399,7 +402,6 @@ export function callsites<U = CallSite>(
 callsites.resolved = () =>
   callsites((_, stack) =>
     stack.map((site) => {
-      type Site = Omit<typeof site, "constructor" | symbol>;
       const proto = (site as any).constructor.prototype as CallSite;
       const properties = Object.getOwnPropertyNames(proto).filter((k) => (
         "constructor" !== k &&
@@ -411,7 +413,8 @@ callsites.resolved = () =>
           const v = site[k as keyof typeof site];
           if (typeof v === "function") (o as any)[k] = v.call(site);
           return o;
-        }, {} as ResolvedCallSite,
+        },
+        {} as ResolvedCallSite,
       );
     })
   ).slice(1);

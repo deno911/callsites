@@ -1,8 +1,10 @@
 # callsites
 
-Deno utility to retrieve call sites information from the [V8 stack trace API](https://v8.dev/docs/stack-trace-api).
+Deno utility to retrieve call sites information from the
+[V8 stack trace API](https://v8.dev/docs/stack-trace-api).
 
-Features zero-cost async-stack-trace methods [`isAsync`](#isasync), [`isPromiseAll`](#ispromiseall), and [`getPromiseIndex`](#getpromiseindex).
+Features zero-cost async-stack-trace methods [`isAsync`](#isasync),
+[`isPromiseAll`](#ispromiseall), and [`getPromiseIndex`](#getpromiseindex).
 
 ## Usage
 
@@ -22,18 +24,20 @@ export function foo() {
 }
 ```
 
-The latter example is useful for getting the information about the caller of your function.
+The latter example is useful for getting the information about the caller of
+your function.
 
 <br>
 
 ## How it works
 
 The `callsites` logic is pretty straightforward:
-  1. reference the existing global `Error.prepareStackTrace` handler
-  2. temporarily replace it with our own `prepareStackTrace` handler
-  3. create a new `Error` object , extract its `stack` property
-  4. restore `Error.prepareStackTrace` to its original state
-  5. return the `stack`, an array of unformatted `CallSite` objects.
+
+1. reference the existing global `Error.prepareStackTrace` handler
+2. temporarily replace it with our own `prepareStackTrace` handler
+3. create a new `Error` object , extract its `stack` property
+4. restore `Error.prepareStackTrace` to its original state
+5. return the `stack`, an array of unformatted `CallSite` objects.
 
 <br>
 
@@ -41,9 +45,10 @@ The `callsites` logic is pretty straightforward:
 
 ## `callsites()`
 
-Exported by default and by name (as `callsites`), this function is used to get the internal stacktrace data before it is serialized into a string.   
+Exported by default and by name (as `callsites`), this function is used to get
+the internal stacktrace data before it is serialized into a string.
 
-Returns an array of [`CallSite` objects](#callsite) by default. 
+Returns an array of [`CallSite` objects](#callsite) by default.
 
 ```ts
 callsites(): CallSite[];
@@ -51,7 +56,8 @@ callsites(): CallSite[];
 
 ## `callsites(prepareStackTrace)`
 
-You can provide `callsites` with a custom handler function to control the stack trace formatting. 
+You can provide `callsites` with a custom handler function to control the stack
+trace formatting.
 
 ```ts
 callsites<T = CallSite[]>(
@@ -61,14 +67,20 @@ callsites<T = CallSite[]>(
 )
 ```
 
-An example of this feature can be seen in action with the [`callsites.resolved()`](#callsitesresolved) function.
-
+An example of this feature can be seen in action with the
+[`callsites.resolved()`](#callsitesresolved) function.
 
 <br>
 
 ## `callsites.resolved()`</a>
 
-Available as a method of the main [`callsites`](#callsites-1) export for convenience, or by the named export `callsitesResolved`, this function evaluates all the callsite methods, replacing them with their resolved values. Internally it relies on the [custom `prepareStackTrace` feature](#callsitespreparestacktrace) of the `callsites` function, to apply its own formatting logic to each `CallSite` in the stack.
+Available as a method of the main [`callsites`](#callsites-1) export for
+convenience, or by the named export `callsitesResolved`, this function evaluates
+all the callsite methods, replacing them with their resolved values. Internally
+it relies on the
+[custom `prepareStackTrace` feature](#callsitespreparestacktrace) of the
+`callsites` function, to apply its own formatting logic to each `CallSite` in
+the stack.
 
 ```ts
 callsites.resolved(): ResolvedCallSite[];
@@ -78,7 +90,9 @@ callsites.resolved(): ResolvedCallSite[];
 
 ## `ResolvedCallSite`
 
-The objects returned from this function have their own interface called `ResolvedCallSite`. It contains all the same properties as `CallSite`, but each method has been resolved to its return value.
+The objects returned from this function have their own interface called
+`ResolvedCallSite`. It contains all the same properties as `CallSite`, but each
+method has been resolved to its return value.
 
 ```ts
 const call = () => callsites.resolved()[0];
@@ -92,7 +106,10 @@ console.log(site);
 
 ## `CallSite`
 
-`CallSite` inherits all the methods found in `NodeJS.CallSite`, adding various improvements to some of the types along the way. For example, overloading the [`getThis()`](#getthis) method that has a generic type parameter, allowing stronger types when the contextual `this` object's shape is known in advance.
+`CallSite` inherits all the methods found in `NodeJS.CallSite`, adding various
+improvements to some of the types along the way. For example, overloading the
+[`getThis()`](#getthis) method that has a generic type parameter, allowing
+stronger types when the contextual `this` object's shape is known in advance.
 
 <br>
 
@@ -100,7 +117,7 @@ console.log(site);
 
 ### `getThis`
 
-Returns the value of the `this` object the call site is bound to, if it exists.  
+Returns the value of the `this` object the call site is bound to, if it exists.\
 Otherwise, returns `undefined`.
 
 ```ts
@@ -110,11 +127,13 @@ getThis(): unknown | undefined;
 getThis<T = unknown>(): T | undefined;
 ```
 
---- 
+---
 
 ### `getTypeName`
 
-Returns the type of `this` as a string. This is the **name** of the function stored in the constructor field of `this`. If unavailable, falls back to the object's internal `[[Class]]` property.  
+Returns the type of `this` as a string. This is the **name** of the function
+stored in the constructor field of `this`. If unavailable, falls back to the
+object's internal `[[Class]]` property.
 
 If a TypeName can't be resolved, returns `null`.
 
@@ -122,11 +141,12 @@ If a TypeName can't be resolved, returns `null`.
 getTypeName(): string | null;
 ```
 
----  
+---
 
 ### `getFunction`
 
-Returns the function itself, or `undefined` if the call site function cannot be resolved.
+Returns the function itself, or `undefined` if the call site function cannot be
+resolved.
 
 ```ts
 getFunction(): Function | undefined;
@@ -135,13 +155,13 @@ getFunction(): Function | undefined;
 getFunction<T extends (...args: any) => any>(): T | undefined.
 ```
 
----  
+---
 
 ### `getFunctionName`
 
-Returns the name of the callee function, typically its `name` property.
-If the name property is missing or empty (as is often the case with arrow functions), 
-attempts to infer a name from the function's context. 
+Returns the name of the callee function, typically its `name` property. If the
+name property is missing or empty (as is often the case with arrow functions),
+attempts to infer a name from the function's context.
 
 If a name can't be determined, this will resolve to `null`.
 
@@ -149,36 +169,39 @@ If a name can't be determined, this will resolve to `null`.
 getFunctionName(): string | null;
 ```
 
----  
+---
 
 ### `getMethodName`
 
-If the call site function is a method of an enclosing class or object, this will return the property name of the `this` object (or one of its prototypes) that contains the actual function. 
+If the call site function is a method of an enclosing class or object, this will
+return the property name of the `this` object (or one of its prototypes) that
+contains the actual function.
 
-If a name can't be determined, returns `undefined`.  
+If a name can't be determined, returns `undefined`.
 
 ```ts
 getMethodName(): string | undefined;
 ```
 
----  
+---
 
 ### `getFileName`
 
 If the function was defined in a script, returns the script resolved filename.
 
-Returns the name of the script if this function was defined in a script.
-If a filename can't be determined, returns `null`.
+Returns the name of the script if this function was defined in a script. If a
+filename can't be determined, returns `null`.
 
 ```ts
 getFileName(): string | null;
 ```
 
----  
+---
 
 ### `getLineNumber`
 
-If the function was defined in a script, returns the line number in that script where the call occurred.  
+If the function was defined in a script, returns the line number in that script
+where the call occurred.
 
 Otherwise, returns `null`.
 
@@ -186,11 +209,12 @@ Otherwise, returns `null`.
 getLineNumber(): number | null;
 ```
 
----  
+---
 
 ### `getColumnNumber`
 
-If the function was defined in a script, returns the column number in that script where the call occurred.  
+If the function was defined in a script, returns the column number in that
+script where the call occurred.
 
 Otherwise, returns `null`.
 
@@ -198,11 +222,12 @@ Otherwise, returns `null`.
 getColumnNumber(): number | null;
 ```
 
----  
+---
 
 ### `getEvalOrigin`
 
-If the function was created in a call to `eval`, returns a string representing the location where `eval` was called.  
+If the function was created in a call to `eval`, returns a string representing
+the location where `eval` was called.
 
 Otherwise, returns `null`.
 
@@ -210,11 +235,12 @@ Otherwise, returns `null`.
 getEvalOrigin(): string | null;
 ```
 
----  
+---
 
 ### `getPromiseIndex`
 
-If the call originated from `Promise.any()` or `Promise.all()`, this method will get the index of the called function in the array of promises.
+If the call originated from `Promise.any()` or `Promise.all()`, this method will
+get the index of the called function in the array of promises.
 
 Otherwise, returns `null`.
 
@@ -222,22 +248,26 @@ Otherwise, returns `null`.
 getPromiseIndex(): number | null;
 ```
 
----  
-
+---
 
 ### `isAsync`
 
-Returns a `boolean` value to indicate whether or not this an asynchronous call. You can use the [`isPromiseAll`](#ispromiseall) method to further determine of the call was explicitly from a `Promise.all()` invocation.
+Returns a `boolean` value to indicate whether or not this an asynchronous call.
+You can use the [`isPromiseAll`](#ispromiseall) method to further determine of
+the call was explicitly from a `Promise.all()` invocation.
 
 ```ts
 isAsync(): boolean;
 ```
 
----  
+---
 
 ### `isPromiseAll`
 
-Returns a `boolean` value to indicate that the call originated from an async invocation via `Promise.all()`. When this is `true`, you can also expect the method [`getPromiseIndex`](#getpromiseindex) to return the called function's index in the array of promises that was provided to `Promise.all()` at runtime.
+Returns a `boolean` value to indicate that the call originated from an async
+invocation via `Promise.all()`. When this is `true`, you can also expect the
+method [`getPromiseIndex`](#getpromiseindex) to return the called function's
+index in the array of promises that was provided to `Promise.all()` at runtime.
 
 ```ts
 isPromiseAll(): boolean;
@@ -253,7 +283,7 @@ Is this a top-level invocation, that is, is this the global object?
 isToplevel(): boolean;
 ```
 
----  
+---
 
 ### `isEval`
 
@@ -263,7 +293,7 @@ Does this call take place in code defined by a call to `eval`?
 isEval(): boolean;
 ```
 
----  
+---
 
 ### `isNative`
 
@@ -273,7 +303,7 @@ Is this call in native V8 code?
 isNative(): boolean;
 ```
 
----  
+---
 
 ### `isConstructor`
 
@@ -285,8 +315,11 @@ isConstructor(): boolean;
 
 <br>
 
----  
+---
 
 ## License
 
-MIT © Nicholas Berlette. Based on [kt3k/callsites](https://github.com/kt3k/callsites) and [sindresorhus/callsites](https://github.com/sindresorhus/callsites). All rights Reserved. 
+MIT © Nicholas Berlette. Based on
+[kt3k/callsites](https://github.com/kt3k/callsites) and
+[sindresorhus/callsites](https://github.com/sindresorhus/callsites). All rights
+Reserved.
